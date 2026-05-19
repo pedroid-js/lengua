@@ -108,21 +108,21 @@ function stemOf(inf) {
 //  -cer/-cir (after consonant) -> c becomes 'z' before 'a','o' (vencer, esparcir)
 //  -cer/-cir (after vowel) -> insert 'z' (conocer -> conozco) [handled in irregulars]
 function applySpelling(stem, suffix, type) {
-  const first = suffix[0];
+  const firstBase = suffix.normalize('NFD').replace(/[̀-ͯ]/g, '')[0]; // ignore tilde for the spelling rule
   const endsWith = ch => stem.endsWith(ch);
 
-  // -car / -gar / -zar : only before 'e'
-  if (first === 'e') {
+  // -car / -gar / -zar : only before 'e' (with or without tilde)
+  if (firstBase === 'e') {
     if (endsWith('c') && type === 'ar') return stem.slice(0, -1) + 'qu' + suffix;
     if (endsWith('g') && type === 'ar') return stem.slice(0, -1) + 'gu' + suffix;
     if (endsWith('z') && type === 'ar') return stem.slice(0, -1) + 'c' + suffix;
   }
   // -ger / -gir : g -> j before 'a','o'
-  if ((first === 'a' || first === 'o') && (type === 'er' || type === 'ir') && endsWith('g')) {
+  if ((firstBase === 'a' || firstBase === 'o') && (type === 'er' || type === 'ir') && endsWith('g')) {
     return stem.slice(0, -1) + 'j' + suffix;
   }
   // -guir : gu -> g before 'a','o'
-  if ((first === 'a' || first === 'o') && type === 'ir' && stem.endsWith('gu')) {
+  if ((firstBase === 'a' || firstBase === 'o') && type === 'ir' && stem.endsWith('gu')) {
     return stem.slice(0, -2) + 'g' + suffix;
   }
   return stem + suffix;

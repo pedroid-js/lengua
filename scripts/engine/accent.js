@@ -116,13 +116,14 @@ export function syllabify(rawWord) {
       const nextGroup = groups[g + 1];
       const between = word.slice(group[group.length - 1] + 1, nextGroup[0]);
       if (between.length === 0) {
-        // shouldn't happen, vowels would have combined
+        // Hiatus: vowels in separate syllables, no consonant between.
         end = nextGroup[0];
       } else if (between.length === 1) {
-        end = nextGroup[0]; // consonant goes with next
+        // Single consonant goes with NEXT syllable.
+        end = nextGroup[0] - 1;
       } else if (between.length === 2) {
-        if (INSEPARABLE.has(between)) end = nextGroup[0]; // both with next
-        else end = nextGroup[0] - 1; // first stays, second goes
+        if (INSEPARABLE.has(between)) end = nextGroup[0] - 2; // both with next
+        else end = nextGroup[0] - 1; // first stays with current, second goes to next
       } else { // 3+
         const last2 = between.slice(-2);
         if (INSEPARABLE.has(last2)) end = nextGroup[0] - 2;

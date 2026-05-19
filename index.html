@@ -144,13 +144,25 @@
     <section class="view view--results" data-view="results" hidden>
       <div class="results">
         <h2 class="results__title">Bitácora de combate</h2>
-        <div class="results__score">
-          <div class="score">
-            <span class="score__num" data-bind="resScore">0</span>
-            <span class="score__tot">/ <span data-bind="resTotal">0</span></span>
+
+        <div class="grade" data-bind="gradeFrame" data-tier="3">
+          <div class="grade__frame">
+            <div class="grade__sparks" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <p class="grade__rank" data-bind="gradeRank">CAPITÁN</p>
+            <div class="grade__numwrap">
+              <span class="grade__num" data-bind="gradeNum">7,5</span>
+              <span class="grade__den">/ 10</span>
+            </div>
+            <p class="grade__title" data-bind="gradeTitle">¡Buena travesía!</p>
+            <p class="grade__score" data-bind="gradeRatio">15 / 20 aciertos</p>
           </div>
-          <p class="score__msg" data-bind="resMsg">—</p>
         </div>
+
+        <p class="score__msg" data-bind="resMsg">—</p>
+
         <ul class="reslist" data-bind="resList"></ul>
         <div class="results__actions">
           <button class="btn btn--primary" data-action="retry">Repetir travesía</button>

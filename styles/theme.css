@@ -1,0 +1,119 @@
+/* ---------- One Piece theme tokens ---------- */
+:root {
+  /* paleta principal */
+  --bg-deep: #07111e;       /* mar profundo nocturno */
+  --bg: #0f1a2b;            /* azul marino */
+  --bg-2: #15263d;
+  --paper: #f6e7c1;          /* pergamino */
+  --paper-2: #ede0b8;
+  --paper-3: #d8c79a;
+  --ink: #f4ead0;            /* texto sobre fondo oscuro */
+  --ink-dark: #2a1b0a;       /* texto sobre pergamino */
+  --gold: #f5c84b;           /* dorado del sombrero */
+  --gold-2: #d8a83a;
+  --red: #c0392b;            /* rojo del lazo del sombrero */
+  --red-2: #8a2820;
+  --blue: #3aa3ff;           /* mar */
+  --teal: #4dd0c6;
+  --green: #56c271;
+  --danger: #ff6b5b;
+  --shadow: 0 12px 30px rgba(0, 0, 0, .35);
+  --shadow-soft: 0 6px 18px rgba(0, 0, 0, .25);
+  --radius: 14px;
+  --radius-lg: 22px;
+  --max: 1100px;
+}
+
+/* fondo: cielo nocturno + mar inferior */
+body {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(245, 200, 75, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 10% 110%, rgba(58, 163, 255, 0.22), transparent 60%),
+    linear-gradient(180deg, var(--bg-deep), var(--bg) 40%, #0a3157 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 0 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 30%, #fff7c4 50%, transparent 51%),
+    radial-gradient(1px 1px at 28% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 64% 22%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 10%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 92% 32%, #fff7c4 50%, transparent 51%),
+    radial-gradient(1px 1px at 7% 60%, #fff 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 45% 6%, #fff 50%, transparent 51%);
+  opacity: .55;
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: "";
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 220px;
+  background: url("../assets/svg/wave.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .9;
+  animation: wave 18s ease-in-out infinite;
+}
+@keyframes wave {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-6px) scaleY(1.02); }
+}
+
+main, header { position: relative; z-index: 1; }
+
+/* ---------- pergamino ---------- */
+.paper {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.04)),
+    radial-gradient(120% 80% at 50% 0%, var(--paper-2), var(--paper) 60%, var(--paper-3));
+  color: var(--ink-dark);
+  border: 1px solid rgba(60, 30, 0, .25);
+  box-shadow:
+    inset 0 0 60px rgba(150, 100, 30, .25),
+    var(--shadow);
+  border-radius: var(--radius);
+  position: relative;
+}
+.paper::before, .paper::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(60, 30, 0, .25);
+  border-radius: calc(var(--radius) - 4px);
+  pointer-events: none;
+}
+.paper::after {
+  inset: 14px;
+  border: none;
+  background-image:
+    radial-gradient(circle at 6% 8%, rgba(80,45,10,.16) 0, transparent 2.5%),
+    radial-gradient(circle at 92% 14%, rgba(80,45,10,.12) 0, transparent 2.2%),
+    radial-gradient(circle at 18% 90%, rgba(80,45,10,.15) 0, transparent 2.5%),
+    radial-gradient(circle at 82% 86%, rgba(80,45,10,.12) 0, transparent 2.2%);
+  pointer-events: none;
+}
+
+/* tinta caligráfica */
+.ink {
+  font-family: 'Pirata One', 'Cinzel', serif;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 2px 0 rgba(0,0,0,.35);
+  letter-spacing: .02em;
+}
+
+/* títulos */
+h1, h2, h3 {
+  font-family: 'Cinzel', serif;
+  letter-spacing: .02em;
+  margin: 0 0 .5rem;
+}
+h1 { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.05; }
+h2 { font-size: clamp(1.4rem, 2.8vw, 2rem); }
+h3 { font-size: 1.1rem; }

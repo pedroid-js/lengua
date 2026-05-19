@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1a2b" />
+  <title>Grand Line de la Lengua · Ejercicios de castellano</title>
+  <meta name="description" content="Ejercicios aleatorios de tiempos verbales y acentos en castellano, con temática de One Piece." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/theme.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="icon" href="assets/svg/jolly.svg" type="image/svg+xml" />
+</head>
+<body data-view="home">
+
+  <header class="topbar">
+    <a class="brand" href="#" data-nav="home" aria-label="Inicio">
+      <img class="brand__logo" src="assets/svg/jolly.svg" alt="" />
+      <span class="brand__title">Grand Line<span class="brand__sub">de la Lengua</span></span>
+    </a>
+
+    <nav class="topnav" aria-label="Menú principal">
+      <button class="navbtn" data-nav="home">Mapa</button>
+      <button class="navbtn" data-nav="exercise">Combate</button>
+      <button class="navbtn" data-nav="stats">Bitácora</button>
+      <button class="navbtn navbtn--ghost" data-nav="settings" aria-label="Ajustes" title="Ajustes">⚙</button>
+    </nav>
+  </header>
+
+  <main id="app" class="app">
+    <!-- HOME / mapa de islas -->
+    <section class="view view--home" data-view="home">
+      <div class="hero">
+        <div class="hero__text">
+          <p class="hero__eyebrow">Academia pirata del castellano</p>
+          <h1 class="hero__title">Conquista la <span class="ink">Grand Line</span> de la lengua</h1>
+          <p class="hero__lede">Ejercicios aleatorios e infinitos de <strong>tiempos verbales</strong> y <strong>acentuación</strong>. Ajusta tu nivel, entrena y revisa cada error como un buen capitán.</p>
+          <div class="hero__cta">
+            <button class="btn btn--primary" data-action="start-quick">¡Zarpar ahora!</button>
+            <button class="btn btn--ghost" data-nav="settings">Ajustar travesía</button>
+          </div>
+        </div>
+        <div class="hero__art" aria-hidden="true">
+          <div class="logpose">
+            <div class="logpose__ring"></div>
+            <div class="logpose__needle"></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section__title">Elige tu isla</h2>
+      <div class="islands" role="list">
+        <article class="island" role="listitem" data-category="verbs">
+          <div class="island__art island__art--verbs" aria-hidden="true"></div>
+          <h3 class="island__name">Isla de los Tiempos</h3>
+          <p class="island__desc">Conjugación: presente, indefinido, imperfecto, subjuntivo… regulares e irregulares.</p>
+          <div class="island__levels">
+            <button class="chip" data-start="verbs" data-level="1">Aprendiz</button>
+            <button class="chip" data-start="verbs" data-level="2">Pirata</button>
+            <button class="chip" data-start="verbs" data-level="3">Yonkō</button>
+          </div>
+        </article>
+
+        <article class="island" role="listitem" data-category="accents">
+          <div class="island__art island__art--accents" aria-hidden="true"></div>
+          <h3 class="island__name">Isla de las Tildes</h3>
+          <p class="island__desc">Agudas, llanas, esdrújulas, diptongos, hiatos y tilde diacrítica.</p>
+          <div class="island__levels">
+            <button class="chip" data-start="accents" data-level="1">Aprendiz</button>
+            <button class="chip" data-start="accents" data-level="2">Pirata</button>
+            <button class="chip" data-start="accents" data-level="3">Yonkō</button>
+          </div>
+        </article>
+
+        <article class="island island--mixed" role="listitem" data-category="mixed">
+          <div class="island__art island__art--mixed" aria-hidden="true"></div>
+          <h3 class="island__name">Raid Boss</h3>
+          <p class="island__desc">Mezcla de todo. Ronda larga, sin red. Para capitanes hechos y derechos.</p>
+          <div class="island__levels">
+            <button class="chip" data-start="mixed" data-level="2">Pirata</button>
+            <button class="chip" data-start="mixed" data-level="3">Yonkō</button>
+          </div>
+        </article>
+      </div>
+
+      <section class="explain">
+        <h2 class="section__title">Cómo funciona</h2>
+        <ol class="explain__list">
+          <li><strong>Eliges isla y nivel.</strong> Cada nivel desbloquea más tiempos verbales y reglas de acentuación.</li>
+          <li><strong>Cada ejercicio es nuevo.</strong> Se generan al vuelo combinando verbos, sujetos, tiempos o palabras. No verás dos veces lo mismo seguido.</li>
+          <li><strong>Corrección razonada.</strong> Si fallas, te explico por qué: la regla concreta, la forma correcta y un ejemplo.</li>
+          <li><strong>Bitácora.</strong> Guardo tu progreso y tus puntos flacos para insistir donde más fallas.</li>
+        </ol>
+      </section>
+    </section>
+
+    <!-- EJERCICIO -->
+    <section class="view view--exercise" data-view="exercise" hidden>
+      <header class="exhead">
+        <div class="exhead__meta">
+          <span class="badge" data-bind="exCategory">—</span>
+          <span class="badge badge--ghost" data-bind="exLevel">Nivel —</span>
+          <span class="badge badge--ghost" data-bind="exKind">—</span>
+        </div>
+        <div class="exhead__progress">
+          <div class="progress"><div class="progress__bar" data-bind="progressBar"></div></div>
+          <span class="exhead__count"><span data-bind="exIndex">1</span> / <span data-bind="exTotal">10</span></span>
+        </div>
+        <button class="iconbtn" data-action="abandon" title="Abandonar combate" aria-label="Abandonar">✕</button>
+      </header>
+
+      <article class="card card--exercise" data-bind="exerciseCard">
+        <p class="card__rubric" data-bind="exRubric">Cargando…</p>
+        <div class="card__body" data-bind="exBody"></div>
+        <p class="card__hint" data-bind="exHint" hidden></p>
+      </article>
+
+      <footer class="exfoot">
+        <button class="btn btn--ghost" data-action="hint">Pista</button>
+        <button class="btn btn--ghost" data-action="skip">Saltar</button>
+        <button class="btn btn--primary" data-action="check">Comprobar</button>
+      </footer>
+
+      <article class="card card--feedback" data-bind="feedbackCard" hidden>
+        <div class="feedback__header">
+          <span class="feedback__icon" data-bind="fbIcon">✓</span>
+          <h3 class="feedback__title" data-bind="fbTitle">¡Correcto!</h3>
+        </div>
+        <p class="feedback__detail" data-bind="fbDetail"></p>
+        <div class="feedback__rule" data-bind="fbRule" hidden></div>
+        <div class="feedback__example" data-bind="fbExample" hidden></div>
+        <div class="feedback__actions">
+          <button class="btn btn--primary" data-action="next">Siguiente</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="view view--results" data-view="results" hidden>
+      <div class="results">
+        <h2 class="results__title">Bitácora de combate</h2>
+        <div class="results__score">
+          <div class="score">
+            <span class="score__num" data-bind="resScore">0</span>
+            <span class="score__tot">/ <span data-bind="resTotal">0</span></span>
+          </div>
+          <p class="score__msg" data-bind="resMsg">—</p>
+        </div>
+        <ul class="reslist" data-bind="resList"></ul>
+        <div class="results__actions">
+          <button class="btn btn--primary" data-action="retry">Repetir travesía</button>
+          <button class="btn btn--ghost" data-nav="home">Volver al mapa</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS / BITÁCORA -->
+    <section class="view view--stats" data-view="stats" hidden>
+      <h2 class="section__title">Bitácora del capitán</h2>
+      <div class="stats" data-bind="statsBlock">
+        <p class="muted">Aún no has zarpado. Empieza una travesía para registrar tu progreso.</p>
+      </div>
+      <button class="btn btn--ghost" data-action="reset-stats">Borrar bitácora</button>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view view--settings" data-view="settings" hidden>
+      <h2 class="section__title">Ajustar travesía</h2>
+      <form class="settings" data-bind="settingsForm">
+        <fieldset class="set">
+          <legend>Nivel por defecto</legend>
+          <label><input type="radio" name="level" value="1" /> Aprendiz · regulares, presentes y básicos</label>
+          <label><input type="radio" name="level" value="2" checked /> Pirata · + indefinido, imperfecto, futuro, subjuntivo presente</label>
+          <label><input type="radio" name="level" value="3" /> Yonkō · todo, incluyendo perfectos y subjuntivo imperfecto</label>
+        </fieldset>
+
+        <fieldset class="set">
+          <legend>Tamaño de la ronda</legend>
+          <label>Ejercicios por ronda: <input type="number" name="size" min="5" max="40" value="10" /></label>
+        </fieldset>
+
+        <fieldset class="set">
+          <legend>Verbos</legend>
+          <label><input type="checkbox" name="vRegular" checked /> Regulares</label>
+          <label><input type="checkbox" name="vStem" checked /> Cambios vocálicos (e→ie, o→ue, e→i)</label>
+          <label><input type="checkbox" name="vIrregular" checked /> Irregulares frecuentes</label>
+          <label><input type="checkbox" name="vSpelling" checked /> Cambios ortográficos (-car, -gar, -zar…)</label>
+        </fieldset>
+
+        <fieldset class="set">
+          <legend>Tiempos verbales</legend>
+          <div class="grid grid--tenses" data-bind="tensesGrid"></div>
+        </fieldset>
+
+        <fieldset class="set">
+          <legend>Acentuación</legend>
+          <label><input type="checkbox" name="aClassify" checked /> Clasificar (aguda / llana / esdrújula)</label>
+          <label><input type="checkbox" name="aTilde" checked /> Añadir tilde si toca</label>
+          <label><input type="checkbox" name="aHiatus" checked /> Diptongos e hiatos</label>
+          <label><input type="checkbox" name="aDiacritic" checked /> Tilde diacrítica (sí/si, tú/tu…)</label>
+          <label><input type="checkbox" name="aInterro" checked /> Interrogativos y exclamativos</label>
+        </fieldset>
+
+        <fieldset class="set">
+          <legend>Tema</legend>
+          <label><input type="checkbox" name="reduceMotion" /> Reducir animaciones</label>
+        </fieldset>
+
+        <div class="settings__actions">
+          <button type="button" class="btn btn--primary" data-action="save-settings">Guardar</button>
+          <button type="button" class="btn btn--ghost" data-action="reset-settings">Valores por defecto</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div class="toast" data-bind="toast" hidden></div>
+
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

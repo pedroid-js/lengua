@@ -26,8 +26,11 @@ const refs = {
   fbDetail:$('[data-bind="fbDetail"]'),
   fbRule:  $('[data-bind="fbRule"]'),
   fbExample:$('[data-bind="fbExample"]'),
-  resScore: $('[data-bind="resScore"]'),
-  resTotal: $('[data-bind="resTotal"]'),
+  gradeFrame: $('[data-bind="gradeFrame"]'),
+  gradeRank:  $('[data-bind="gradeRank"]'),
+  gradeNum:   $('[data-bind="gradeNum"]'),
+  gradeTitle: $('[data-bind="gradeTitle"]'),
+  gradeRatio: $('[data-bind="gradeRatio"]'),
   resMsg:   $('[data-bind="resMsg"]'),
   resList:  $('[data-bind="resList"]'),
   statsBlock: $('[data-bind="statsBlock"]'),
@@ -130,10 +133,14 @@ function finishSession() {
 }
 
 function renderResults(run) {
-  refs.resScore.textContent = run.correct;
-  refs.resTotal.textContent = run.total;
-  const pct = run.total ? Math.round((run.correct / run.total) * 100) : 0;
-  refs.resMsg.textContent = msgForScore(pct);
+  const grade = run.total ? (run.correct / run.total) * 10 : 0;
+  const tier = tierFor(grade);
+  refs.gradeFrame.dataset.tier = String(tier.id);
+  refs.gradeRank.textContent = tier.rank;
+  refs.gradeNum.textContent = formatGrade(grade);
+  refs.gradeTitle.textContent = tier.title;
+  refs.gradeRatio.textContent = `${run.correct} / ${run.total} aciertos`;
+  refs.resMsg.textContent = tier.msg;
   refs.resList.innerHTML = '';
   session.items.forEach((ex, i) => {
     const v = session.verdicts[i];
@@ -163,12 +170,47 @@ function renderResults(run) {
   });
 }
 
-function msgForScore(p) {
-  if (p === 100) return '¡Tripulación legendaria! Mereces ser Rey de los Piratas de la lengua.';
-  if (p >= 85)   return '¡Excelente! El Grand Line está a tu alcance.';
-  if (p >= 70)   return 'Buena travesía, capitán. Sigue afinando el rumbo.';
-  if (p >= 50)   return 'Hay tesoro a la vista, pero falta navegar más.';
-  return 'Las aguas están bravas. Repite la travesía y revisa la bitácora.';
+// ---------- grading (0–10, 1 decimal, school style) ----------
+function formatGrade(n) {
+  // round to 1 decimal, Spanish style with comma
+  const r = Math.round(n * 10) / 10;
+  // exactly 10 should show as "10"; otherwise always one decimal
+  if (r >= 10) return '10';
+  return r.toFixed(1).replace('.', ',');
+}
+
+function tierFor(grade) {
+  // Tiers driven by the 0–10 grade.
+  if (grade >= 9.0) return {
+    id: 1,
+    rank: 'REY DE LOS PIRATAS',
+    title: 'Matrícula de honor',
+    msg: '¡Tripulación legendaria! El Grand Line de la lengua es tuyo.',
+  };
+  if (grade >= 7.0) return {
+    id: 2,
+    rank: 'YONKŌ',
+    title: 'Notable',
+    msg: '¡Excelente travesía! El tesoro está cada vez más cerca.',
+  };
+  if (grade >= 5.0) return {
+    id: 3,
+    rank: 'CAPITÁN',
+    title: 'Aprobado',
+    msg: 'Has aprobado, capitán. Sigue afinando el rumbo.',
+  };
+  if (grade >= 3.0) return {
+    id: 4,
+    rank: 'GRUMETE A REMOJO',
+    title: 'Suspenso',
+    msg: 'Aguas bravas. Repasa la bitácora y vuelve al ataque.',
+  };
+  return {
+    id: 5,
+    rank: 'NAUFRAGIO',
+    title: 'Muy deficiente',
+    msg: 'El barco se hundió. Empieza por los regulares y los presentes.',
+  };
 }
 
 // ---------- stats ----------

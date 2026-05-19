@@ -496,14 +496,345 @@
 
 /* ---------- results ---------- */
 .results { text-align: center; padding: 1rem 0 3rem; }
-.results__score {
-  display: flex; flex-direction: column; align-items: center; gap: .25rem;
-  margin: 1rem 0 1.5rem;
+.score__msg { color: var(--ink); margin: 1rem 0 .5rem; opacity: .9; font-style: italic; }
+
+/* ===== GRADE FRAME =====================================================
+   5 progressive tiers driven by [data-tier="1..5"]:
+     1 = Sobresaliente alto / Rey de los Piratas (9.0–10)
+     2 = Notable / Yonkō (7.0–8.9)
+     3 = Aprobado / Capitán (5.0–6.9)
+     4 = Suspenso / Grumete (3.0–4.9)
+     5 = Naufragio (0–2.9)
+   Each tier swaps colors, frame texture, animation and decoration.
+========================================================================== */
+.grade {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem auto 1rem;
+  perspective: 800px;
 }
-.score { font-family: 'Cinzel', serif; color: var(--ink); }
-.score__num { font-size: 4rem; color: var(--gold); }
-.score__tot { font-size: 1.4rem; opacity: .8; }
-.score__msg { color: var(--ink); margin: 0; opacity: .9; }
+.grade__frame {
+  --frame: linear-gradient(180deg, #2b1c0a, #170c03);
+  --innerBg: radial-gradient(120% 80% at 50% 30%, #1a2b46, #0a1424);
+  --numColor: #f5c84b;
+  --numShadow: 0 0 24px rgba(245, 200, 75, .55), 0 2px 0 rgba(0,0,0,.45);
+  --rankColor: var(--gold);
+  --titleColor: var(--ink);
+  --borderColor: #f5c84b;
+  --rotate: 0deg;
+  position: relative;
+  padding: 1.6rem 2.2rem 1.2rem;
+  border-radius: 22px;
+  background: var(--frame);
+  border: 3px solid var(--borderColor);
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.45),
+    inset 0 0 36px rgba(0,0,0,.55);
+  min-width: 280px;
+  max-width: 460px;
+  transform: rotate(var(--rotate));
+  isolation: isolate;
+  overflow: hidden;
+}
+/* Inner glow plate */
+.grade__frame::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 16px;
+  background: var(--innerBg);
+  box-shadow: inset 0 0 36px rgba(0,0,0,.4);
+  z-index: 0;
+}
+/* Filigree corner ornaments */
+.grade__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background:
+    radial-gradient(8px 8px at 18px 18px,   var(--borderColor) 60%, transparent 62%),
+    radial-gradient(8px 8px at calc(100% - 18px) 18px,   var(--borderColor) 60%, transparent 62%),
+    radial-gradient(8px 8px at 18px calc(100% - 18px),   var(--borderColor) 60%, transparent 62%),
+    radial-gradient(8px 8px at calc(100% - 18px) calc(100% - 18px), var(--borderColor) 60%, transparent 62%);
+  pointer-events: none;
+  z-index: 0;
+}
+.grade__rank,
+.grade__numwrap,
+.grade__title,
+.grade__score { position: relative; z-index: 2; }
+.grade__rank {
+  font-family: 'Pirata One', 'Cinzel', serif;
+  font-size: 1.2rem;
+  letter-spacing: .25em;
+  margin: 0 0 .25rem;
+  color: var(--rankColor);
+  text-shadow: 0 2px 0 rgba(0,0,0,.5);
+}
+.grade__numwrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .35rem;
+  margin: .25rem 0;
+}
+.grade__num {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: clamp(4.5rem, 12vw, 6.5rem);
+  line-height: 1;
+  color: var(--numColor);
+  text-shadow: var(--numShadow);
+  letter-spacing: -.02em;
+  position: relative;
+}
+.grade__den {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--titleColor);
+  opacity: .65;
+}
+.grade__title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  margin: .25rem 0 .1rem;
+  color: var(--titleColor);
+  letter-spacing: .08em;
+}
+.grade__score {
+  margin: 0;
+  font-size: .9rem;
+  color: var(--titleColor);
+  opacity: .75;
+  letter-spacing: .04em;
+}
+
+/* Sparks: 8 little particles around the number */
+.grade__sparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+}
+.grade__sparks span {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: radial-gradient(circle, #fff7c4 0%, var(--borderColor) 60%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(.2px);
+  animation: spark 2.4s ease-in-out infinite;
+}
+.grade__sparks span:nth-child(1) { top: 15%; left: 12%; animation-delay: 0s;   }
+.grade__sparks span:nth-child(2) { top: 22%; right: 14%; animation-delay: .2s; }
+.grade__sparks span:nth-child(3) { top: 55%; left: 8%;  animation-delay: .4s; }
+.grade__sparks span:nth-child(4) { top: 60%; right: 9%; animation-delay: .6s; }
+.grade__sparks span:nth-child(5) { top: 80%; left: 30%; animation-delay: .8s; }
+.grade__sparks span:nth-child(6) { top: 85%; right: 28%; animation-delay: 1.0s; }
+.grade__sparks span:nth-child(7) { top: 40%; left: 50%; transform: translateX(-50%); animation-delay: 1.2s; }
+.grade__sparks span:nth-child(8) { top: 8%;  left: 50%; transform: translateX(-50%); animation-delay: 1.4s; }
+@keyframes spark {
+  0%, 100% { transform: scale(0); opacity: 0; }
+  40% { transform: scale(1); opacity: 1; }
+  60% { transform: scale(1.6); opacity: .7; }
+}
+
+/* ====== TIER 1 — Rey de los Piratas (9.0–10) ====== */
+.grade[data-tier="1"] .grade__frame {
+  --frame:
+    conic-gradient(from 0deg, #f5c84b, #ffeaa1 30%, #d8a83a 50%, #fff1c4 70%, #f5c84b 90%),
+    linear-gradient(180deg, #ffeaa1, #b8842a);
+  --innerBg:
+    radial-gradient(60% 60% at 50% 40%, #2d1c40, #0b1024 70%),
+    repeating-conic-gradient(from 0deg, transparent 0 12deg, rgba(245,200,75,.06) 12deg 14deg);
+  --numColor: #fff7c4;
+  --numShadow:
+    0 0 18px rgba(255,247,196,.85),
+    0 0 36px rgba(245,200,75,.65),
+    0 0 64px rgba(245,200,75,.4),
+    0 2px 0 rgba(80,40,0,.55);
+  --rankColor: #fff7c4;
+  --titleColor: #fff8e1;
+  --borderColor: #fff1c4;
+  --rotate: 0deg;
+  box-shadow:
+    0 24px 64px rgba(245,200,75,.45),
+    0 0 0 4px rgba(255,241,196,.45),
+    inset 0 0 48px rgba(0,0,0,.5);
+  animation: floaty 4s ease-in-out infinite;
+}
+.grade[data-tier="1"] .grade__num {
+  background: linear-gradient(180deg, #fff7c4 0%, #f5c84b 45%, #fff1c4 50%, #d8a83a 55%, #fff7c4 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  background-size: 100% 220%;
+  animation: shimmer 3s linear infinite;
+}
+.grade[data-tier="1"] .grade__rank::before {
+  content: "♛ ";
+  color: var(--gold);
+}
+.grade[data-tier="1"] .grade__rank::after  { content: " ♛"; color: var(--gold); }
+.grade[data-tier="1"] .grade__sparks { opacity: 1; }
+/* radiating beams behind the number */
+.grade[data-tier="1"] .grade__frame > .grade__numwrap::after {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  background: conic-gradient(from 0deg, transparent 0deg 16deg, rgba(255,241,196,.18) 16deg 24deg, transparent 24deg 40deg);
+  filter: blur(2px);
+  z-index: -1;
+  animation: rotate 18s linear infinite;
+}
+.grade[data-tier="1"] .grade__numwrap { position: relative; isolation: isolate; }
+@keyframes shimmer {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 0% 200%; }
+}
+@keyframes floaty {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50%      { transform: rotate(0deg) translateY(-4px); }
+}
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ====== TIER 2 — Yonkō (7.0–8.9) ====== */
+.grade[data-tier="2"] .grade__frame {
+  --frame: linear-gradient(180deg, #c08646, #6c3f15);
+  --innerBg: radial-gradient(70% 70% at 50% 35%, #2b1e3f, #0d0a1c);
+  --numColor: #f3b76a;
+  --numShadow:
+    0 0 14px rgba(243,183,106,.55),
+    0 0 28px rgba(243,183,106,.3),
+    0 2px 0 rgba(0,0,0,.5);
+  --rankColor: #f3b76a;
+  --titleColor: #ffe0b3;
+  --borderColor: #c08646;
+  --rotate: 0deg;
+  box-shadow:
+    0 18px 46px rgba(192,134,70,.35),
+    inset 0 0 36px rgba(0,0,0,.5);
+}
+.grade[data-tier="2"] .grade__num {
+  background: linear-gradient(180deg, #ffd49e 0%, #c08646 60%, #8b5320 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+.grade[data-tier="2"] .grade__sparks { opacity: .35; }
+
+/* ====== TIER 3 — Capitán / Aprobado (5.0–6.9) ====== */
+.grade[data-tier="3"] .grade__frame {
+  --frame:
+    repeating-linear-gradient(90deg, #6a4318 0 18px, #5a3812 18px 22px),
+    linear-gradient(180deg, #5a3812, #2c1c08);
+  --innerBg: radial-gradient(80% 80% at 50% 40%, #f2dfa6, #d4bf7d);
+  --numColor: #3a2410;
+  --numShadow: 0 1px 0 rgba(255,250,220,.5), 0 -1px 0 rgba(0,0,0,.4);
+  --rankColor: #5a3812;
+  --titleColor: #3a2410;
+  --borderColor: #c0a060;
+  --rotate: 0deg;
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.35),
+    inset 0 0 22px rgba(0,0,0,.4);
+}
+.grade[data-tier="3"] .grade__frame::before {
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, #ede0b8, #d6c690 60%, #c0a060),
+    radial-gradient(circle at 12% 18%, rgba(70,40,10,.18) 0, transparent 3%),
+    radial-gradient(circle at 85% 25%, rgba(70,40,10,.14) 0, transparent 3%),
+    radial-gradient(circle at 30% 80%, rgba(70,40,10,.16) 0, transparent 3%),
+    radial-gradient(circle at 75% 70%, rgba(70,40,10,.14) 0, transparent 3%);
+}
+.grade[data-tier="3"] .grade__den { opacity: .6; }
+.grade[data-tier="3"] .grade__sparks { display: none; }
+
+/* ====== TIER 4 — Suspenso / Grumete (3.0–4.9) ====== */
+.grade[data-tier="4"] .grade__frame {
+  --frame:
+    linear-gradient(180deg, #3a2a1a, #1b0f06),
+    repeating-linear-gradient(115deg, transparent 0 6px, rgba(255,255,255,.03) 6px 7px);
+  --innerBg: radial-gradient(80% 80% at 50% 40%, #41302a, #15100c);
+  --numColor: #8a6f5a;
+  --numShadow: inset 0 2px 0 rgba(0,0,0,.6);
+  --rankColor: #b18a6b;
+  --titleColor: #c7b29a;
+  --borderColor: #7a5a3a;
+  --rotate: -1.6deg;
+  filter: saturate(.6);
+  box-shadow:
+    0 16px 28px rgba(0,0,0,.45),
+    inset 0 0 30px rgba(0,0,0,.6);
+}
+/* cracks across the number */
+.grade[data-tier="4"] .grade__frame .grade__num {
+  position: relative;
+}
+.grade[data-tier="4"] .grade__frame .grade__num::before,
+.grade[data-tier="4"] .grade__frame .grade__num::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(15deg, transparent 48%, rgba(20,12,5,.55) 49%, transparent 51%) no-repeat,
+    linear-gradient(-30deg, transparent 60%, rgba(20,12,5,.4) 61%, transparent 63%) no-repeat;
+}
+.grade[data-tier="4"] .grade__sparks { display: none; }
+.grade[data-tier="4"] .grade__rank { letter-spacing: .35em; opacity: .9; }
+.grade[data-tier="4"] .grade__title { font-style: italic; opacity: .85; }
+
+/* ====== TIER 5 — Naufragio (0–2.9) ====== */
+.grade[data-tier="5"] .grade__frame {
+  --frame:
+    radial-gradient(60% 60% at 50% 30%, #1f2b3a, #0a0d12),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0 4px, transparent 4px 9px);
+  --innerBg:
+    radial-gradient(80% 80% at 50% 30%, #2a3140, #0b0e15);
+  --numColor: #5a6772;
+  --numShadow: 0 2px 0 rgba(0,0,0,.7);
+  --rankColor: #8e3a2c;
+  --titleColor: #aab1bc;
+  --borderColor: #3a2820;
+  --rotate: -2.6deg;
+  filter: saturate(.4) contrast(.95);
+  clip-path: polygon(
+    0% 6%, 4% 0, 14% 4%, 28% 0, 42% 4%, 58% 1%, 70% 5%, 86% 0%, 100% 4%,
+    100% 96%, 92% 100%, 76% 95%, 60% 100%, 44% 95%, 28% 100%, 14% 96%, 0% 100%
+  );
+  box-shadow:
+    0 16px 28px rgba(0,0,0,.55),
+    inset 0 0 40px rgba(0,0,0,.7);
+}
+.grade[data-tier="5"] .grade__frame::after {
+  /* moss-like blotches replacing the filigree */
+  background:
+    radial-gradient(14px 10px at 18% 30%, rgba(60,100,50,.5), transparent 70%),
+    radial-gradient(14px 10px at 82% 70%, rgba(60,100,50,.4), transparent 70%),
+    radial-gradient(10px 8px at 30% 80%, rgba(100,80,40,.45), transparent 70%),
+    radial-gradient(10px 8px at 70% 20%, rgba(100,80,40,.45), transparent 70%);
+}
+.grade[data-tier="5"] .grade__num {
+  font-style: italic;
+  text-decoration: line-through;
+  text-decoration-color: rgba(140, 30, 20, .55);
+  text-decoration-thickness: .12em;
+}
+.grade[data-tier="5"] .grade__rank::before { content: "☠ "; }
+.grade[data-tier="5"] .grade__rank::after  { content: " ☠"; }
+.grade[data-tier="5"] .grade__sparks { display: none; }
+
+/* Reduce motion */
+body.reduce-motion .grade__frame,
+body.reduce-motion .grade__num,
+body.reduce-motion .grade__sparks span,
+body.reduce-motion .grade[data-tier="1"] .grade__numwrap::after {
+  animation: none !important;
+}
 .reslist {
   list-style: none;
   padding: 0;

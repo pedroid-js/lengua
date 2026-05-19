@@ -105,8 +105,10 @@ function verbDiagnosis(ex, yours, correct) {
   if (!yours) return '';
   const verb = getVerb(ex.payload.verb);
   if (!verb) return '';
-  const tense = ex.payload.tense;
+  // `fill`/`mcq` use `payload.tense`; `transform` uses `payload.to` for the target tense.
+  const tense = ex.payload.tense ?? ex.payload.to;
   const person = ex.payload.person;
+  if (!tense || !TENSES[tense]) return '';
   const table = conjugate(verb);
   // Did the user conjugate in another person of the same tense?
   for (const [p, form] of Object.entries(table[tense] || {})) {
